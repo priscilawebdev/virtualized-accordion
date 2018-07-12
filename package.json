@@ -1,0 +1,29 @@
+{
+  "name": "using-preact",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "node server.js",
+    "build": "next build",
+    "start": "NODE_ENV=production node server.js",
+    "precommit": "pretty-quick --staged"
+  },
+  "dependencies": {
+    "@zeit/next-preact": "0.0.7",
+    "emotion": "^9.2.5",
+    "emotion-server": "^9.2.5",
+    "lorem-ipsum": "^1.0.5",
+    "next": "^6.1.1",
+    "preact": "8.2.7",
+    "preact-compat": "3.18.0",
+    "preact-emotion": "^9.2.5",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "eslint-plugin-prettier": "^2.6.2",
+    "husky": "^0.14.3",
+    "prettier": "1.13.7",
+    "pretty-quick": "^1.6.0"
+  }
+}

@@ -1,39 +1,34 @@
 import styled from 'preact-emotion'
 
-const Wrapper = styled('li')`
-  padding: 12px 24px;
-  width: 100%;
-  display: flex;
-  position: relative;
-  box-sizing: border-box;
-  text-align: left;
-  align-items: center;
-  justify-content: flex-start;
-  text-decoration: none;
-`
+const Wrapper = styled('div')(
+  {
+    borderBottom: '1px solid #ddd',
+  },
+  props => ({ ...props })
+)
 
 const Inner = styled('div')`
-  flex: 1 1 auto;
-  padding: 0 16px;
-  min-width: 0;
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 24px;
 `
 
 const Title = styled('div')`
-  background-color: #eeeeee;
   user-select: none;
   font-weight: 200;
   cursor: pointer;
-  padding: 0.2em 0.5em;
   text-transform: capitalize;
-  border-radius: 3px;
+  padding: 0.2em 0.5em;
 `
 
 const Description = styled('div')`
   padding: 0.2em 0.5em;
+  display: none;
 `
 
-const ListItem = ({ title, description }) => (
-  <Wrapper>
+const ListItem = ({ title, description, ...props }) => (
+  <Wrapper {...props}>
     <Inner>
       <Title>{title}</Title>
       <Description>{description}</Description>

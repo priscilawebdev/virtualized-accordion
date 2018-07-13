@@ -22,6 +22,10 @@ export default class MyDocument extends Document {
       <html>
         <Head>
           <title>Virtualized Accordion</title>
+          <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css?family=Roboto:300,400,500"
+          />
           <style dangerouslySetInnerHTML={{ __html: this.props.css }} />
         </Head>
         <body>

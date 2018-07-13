@@ -11,13 +11,16 @@ const Inner = styled('div')`
   display: flex;
   align-items: center;
   height: 100%;
+  cursor: pointer;
   padding: 0 24px;
+  &:hover {
+    background-color: #eeeeee;
+  }
 `
 
 const Title = styled('div')`
   user-select: none;
   font-weight: 200;
-  cursor: pointer;
   text-transform: capitalize;
   padding: 0.2em 0.5em;
 `

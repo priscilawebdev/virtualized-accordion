@@ -50,11 +50,11 @@ export default class App extends Component {
       <List innerRef={this.setScrollElement}>
         {this.state.scrollElement && (
           <WindowScroller scrollElement={this.state.scrollElement}>
-            {({ onScroll, scrollTop, onChildScroll, height }) => (
+            {({ onScroll, scrollTop, onChildScroll, height = 400 }) => (
               <VList
                 autoHeight
                 width={800}
-                height={height || 400}
+                height={height}
                 onScroll={onChildScroll}
                 scrollTop={scrollTop}
                 rowHeight={rowHeight}

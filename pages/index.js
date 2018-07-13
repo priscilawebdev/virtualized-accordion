@@ -1,14 +1,16 @@
 import React, { Component } from 'react'
 import Link from 'next/link'
 import loremIpsum from 'lorem-ipsum'
+import { List as VList, WindowScroller } from 'react-virtualized'
 import List from '../components/list'
 import ListItem from '../components/listItem'
 import Spinner from '../components/spinner'
 
 const rowCount = 1000
+const rowHeight = 48
 
 export default class App extends Component {
-  state = { list: [] }
+  state = { scrollElement: null, list: [] }
 
   componentDidMount = () => {
     this.setState({
@@ -32,15 +34,39 @@ export default class App extends Component {
     })
   }
 
-  renderList = () => (
-    <List>
-      {this.state.list.map(item => (
-        <ListItem title={item.title} description={item.description} />
-      ))}
-    </List>
+  renderRow = ({ index, key, style }) => (
+    <ListItem
+      key={key}
+      style={style}
+      title={this.state.list[index].title}
+      description={this.state.list[index].description}
+    />
   )
 
+  setScrollElement = scrollElement => this.setState({ scrollElement })
+
   render() {
-    return this.state.list.length > 0 ? this.renderList() : <Spinner />
+    return this.state.list.length ? (
+      <List innerRef={this.setScrollElement}>
+        {this.state.scrollElement && (
+          <WindowScroller scrollElement={this.state.scrollElement}>
+            {({ onScroll, scrollTop, onChildScroll, height }) => (
+              <VList
+                autoHeight
+                width={800}
+                height={height || 400}
+                onScroll={onChildScroll}
+                scrollTop={scrollTop}
+                rowHeight={rowHeight}
+                rowRenderer={this.renderRow}
+                rowCount={this.state.list.length}
+              />
+            )}
+          </WindowScroller>
+        )}
+      </List>
+    ) : (
+      <Spinner />
+    )
   }
 }

@@ -10,3 +10,6 @@ package-lock.json
 yarn.lock
 config.json
 *.log
+
+# IDE
+.history/

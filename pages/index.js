@@ -50,16 +50,16 @@ export default class App extends Component {
       <List innerRef={this.setScrollElement}>
         {this.state.scrollElement && (
           <WindowScroller scrollElement={this.state.scrollElement}>
-            {({ onScroll, scrollTop, onChildScroll, height = 400 }) => (
+            {({ onChildScroll, height = 400, ...props }) => (
               <VList
-                autoHeight
+                {...props}
                 width={800}
                 height={height}
                 onScroll={onChildScroll}
-                scrollTop={scrollTop}
                 rowHeight={rowHeight}
                 rowRenderer={this.renderRow}
                 rowCount={this.state.list.length}
+                autoHeight
               />
             )}
           </WindowScroller>

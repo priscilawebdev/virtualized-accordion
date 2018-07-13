@@ -3,6 +3,7 @@ import Link from 'next/link'
 import loremIpsum from 'lorem-ipsum'
 import List from '../components/list'
 import ListItem from '../components/listItem'
+import Spinner from '../components/spinner'
 
 const rowCount = 1000
 
@@ -40,6 +41,6 @@ export default class App extends Component {
   )
 
   render() {
-    return this.state.list.length > 0 ? this.renderList() : 'Loading...'
+    return this.state.list.length > 0 ? this.renderList() : <Spinner />
   }
 }

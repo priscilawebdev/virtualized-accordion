@@ -2,13 +2,14 @@ import React, { Component } from 'react'
 import loremIpsum from 'lorem-ipsum'
 import { List as VList, WindowScroller } from 'react-virtualized'
 import { List, ListItem } from '../components/list'
+import { Accordion, AccordionItem } from '../components/accordion'
 import Spinner from '../components/spinner'
 
 const rowCount = 1000
 const rowHeight = 48
 
 export default class App extends Component {
-  state = { scrollElement: null, list: [] }
+  state = { scrollElement: null, list: [], activeItem: {} }
 
   componentDidMount = () => {
     this.setState({
@@ -41,28 +42,50 @@ export default class App extends Component {
     />
   )
 
+  handleTogle = item => () => {
+    this.setState({
+      activeItem:
+        JSON.stringify(item) === JSON.stringify(this.state.activeItem)
+          ? {}
+          : item,
+    })
+  }
+
   setScrollElement = scrollElement => this.setState({ scrollElement })
 
   render() {
     return this.state.list.length ? (
-      <List innerRef={this.setScrollElement}>
-        {this.state.scrollElement && (
-          <WindowScroller scrollElement={this.state.scrollElement}>
-            {({ onChildScroll, height = 400, ...props }) => (
-              <VList
-                {...props}
-                width={800}
-                height={height}
-                onScroll={onChildScroll}
-                rowHeight={rowHeight}
-                rowRenderer={this.renderRow}
-                rowCount={this.state.list.length}
-                autoHeight
-              />
-            )}
-          </WindowScroller>
-        )}
-      </List>
+      <div>
+        <List innerRef={this.setScrollElement}>
+          {this.state.scrollElement && (
+            <WindowScroller scrollElement={this.state.scrollElement}>
+              {({ onChildScroll, height = 400, ...props }) => (
+                <VList
+                  {...props}
+                  width={800}
+                  height={height}
+                  onScroll={onChildScroll}
+                  rowHeight={rowHeight}
+                  rowRenderer={this.renderRow}
+                  rowCount={this.state.list.length}
+                  autoHeight
+                />
+              )}
+            </WindowScroller>
+          )}
+        </List>
+        <Accordion>
+          {this.state.list.map(item => (
+            <AccordionItem
+              key={item.id}
+              headerContent={item.title}
+              bodyContent={item.description}
+              onClick={this.handleTogle(item)}
+              expanded={this.state.activeItem === item}
+            />
+          ))}
+        </Accordion>
+      </div>
     ) : (
       <Spinner />
     )

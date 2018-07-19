@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
-import Link from 'next/link'
 import loremIpsum from 'lorem-ipsum'
 import { List as VList, WindowScroller } from 'react-virtualized'
-import List from '../components/list'
-import ListItem from '../components/listItem'
+import { List, ListItem } from '../components/list'
 import Spinner from '../components/spinner'
 
 const rowCount = 1000

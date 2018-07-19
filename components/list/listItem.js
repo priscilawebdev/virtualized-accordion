@@ -1,4 +1,6 @@
+import React from 'react'
 import styled from 'preact-emotion'
+import PropTypes from 'prop-types'
 
 const Wrapper = styled('div')(
   {
@@ -38,5 +40,10 @@ const ListItem = ({ title, description, ...props }) => (
     </Inner>
   </Wrapper>
 )
+
+ListItem.propTypes = {
+  title: PropTypes.string,
+  description: PropTypes.string,
+}
 
 export default ListItem

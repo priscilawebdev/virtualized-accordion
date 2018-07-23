@@ -1,15 +1,23 @@
 import React, { Component } from 'react'
 import loremIpsum from 'lorem-ipsum'
-import { List as VList, WindowScroller } from 'react-virtualized'
-import { List, ListItem } from '../components/list'
+import {
+  List,
+  AutoSizer,
+  CellMeasurer,
+  CellMeasurerCache,
+} from 'react-virtualized'
 import { Accordion, AccordionItem } from '../components/accordion'
 import Spinner from '../components/spinner'
 
 const rowCount = 1000
-const rowHeight = 48
+
+const cache = new CellMeasurerCache({
+  defaultHeight: 60,
+  fixedWidth: true,
+})
 
 export default class App extends Component {
-  state = { scrollElement: null, list: [], activeItem: {} }
+  state = { list: [] }
 
   componentDidMount = () => {
     this.setState({
@@ -29,63 +37,75 @@ export default class App extends Component {
             sentenceLowerBound: 4,
             sentenceUpperBound: 30,
           }),
+          active: false,
         })),
     })
   }
 
-  renderRow = ({ index, key, style }) => (
-    <ListItem
-      key={key}
-      style={style}
-      title={this.state.list[index].title}
-      description={this.state.list[index].description}
-    />
-  )
-
-  handleTogle = item => () => {
-    this.setState({
-      activeItem:
-        JSON.stringify(item) === JSON.stringify(this.state.activeItem)
-          ? {}
-          : item,
-    })
+  rowRenderer = ({ index, parent, style }) => {
+    const { list } = this.state
+    return (
+      <CellMeasurer
+        cache={cache}
+        columnIndex={0}
+        key={list[index].id}
+        parent={parent}
+        rowIndex={index}
+      >
+        <div style={{ ...style, transform: 'height 200ms ease-in-out' }}>
+          <AccordionItem
+            headerContent={list[index].title}
+            bodyContent={list[index].description}
+            onClick={this.handleTogle(index)}
+            expanded={list[index].active}
+            last={index === list.length - 1}
+          />
+        </div>
+      </CellMeasurer>
+    )
   }
 
-  setScrollElement = scrollElement => this.setState({ scrollElement })
+  getRowHeight = ({ index }) =>
+    this.state.list[index].active ? cache.getHeight(index) : cache.defaultHeight
+
+  handleTogle = index => () => {
+    const { list } = this.state
+    this.setState(
+      {
+        list: list.map(item => ({
+          ...item,
+          active: item.id === list[index].id ? !item.active : false,
+        })),
+      },
+      () => {
+        setTimeout(() => {
+          this.list.recomputeRowHeights()
+          this.list.forceUpdate()
+        }, list[index].active ? 200 : 0)
+      }
+    )
+  }
 
   render() {
-    return this.state.list.length ? (
-      <div>
-        <List innerRef={this.setScrollElement}>
-          {this.state.scrollElement && (
-            <WindowScroller scrollElement={this.state.scrollElement}>
-              {({ onChildScroll, height = 400, ...props }) => (
-                <VList
-                  {...props}
-                  width={800}
-                  height={height}
-                  onScroll={onChildScroll}
-                  rowHeight={rowHeight}
-                  rowRenderer={this.renderRow}
-                  rowCount={this.state.list.length}
-                  autoHeight
-                />
-              )}
-            </WindowScroller>
-          )}
-        </List>
-        <Accordion>
-          {this.state.list.map(item => (
-            <AccordionItem
-              key={item.id}
-              headerContent={item.title}
-              bodyContent={item.description}
-              onClick={this.handleTogle(item)}
-              expanded={this.state.activeItem === item}
+    const { list } = this.state
+    return list.length ? (
+      <Accordion>
+        <AutoSizer defaultHeight={400} defaultWidth={500}>
+          {({ height, width }) => (
+            <List
+              deferredMeasurementCache={cache}
+              height={height}
+              width={width}
+              ref={element => {
+                this.list = element
+              }}
+              rowCount={list.length}
+              rowHeight={this.getRowHeight}
+              rowRenderer={this.rowRenderer}
             />
-          ))}
-        </Accordion>
-      </div>
+          )}
+        </AutoSizer>
+      </Accordion>
     ) : (
       <Spinner />
     )

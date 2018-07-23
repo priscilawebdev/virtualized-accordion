@@ -4,15 +4,13 @@ import styled from 'preact-emotion'
 
 const Body = styled('div')`
   color: #666;
-  transition: 200ms ease-in-out;
-  padding: 0 20px;
-  max-height: 0px;
-  overflow: hidden;
+  transition: padding 200ms ease-in-out;
+  padding: 0px 20px;
+  margin: 10px 0;
   ${({ expanded }) =>
     expanded && {
-      maxHeight: 'none',
-      overflow: 'visible',
       padding: '10px 20px',
+      margin: 0,
     }};
 `
 

@@ -4,7 +4,6 @@ import styled from 'preact-emotion'
 
 const Header = styled('div')`
   background-color: #fafafa;
-  border-top: 1px solid #ccc;
   color: #333;
   padding: 20px;
   text-transform: uppercase;
